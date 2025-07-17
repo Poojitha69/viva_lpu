@@ -61,26 +61,22 @@ router.put('/:id', auth, async (req, res) => {
 });
 
 // ✅ Delete a task by ID
+
+
 router.delete('/:id', auth, async (req, res) => {
-  console.log("DELETE called with ID:", req.params.id);
-  console.log("User ID:", req.user.id);
+  console.log('DELETE called with ID:', req.params.id);
+  console.log('User ID:', req.user.id);
 
   try {
-    let task = await Task.findById(req.params.id);
-    console.log("Found Task:", task);
+    const task = await Task.findOne({ _id: req.params.id, user: req.user.id });
+    console.log('Found Task:', task);
 
     if (!task) return res.status(404).json({ msg: 'Task not found' });
 
-    if (task.user.toString() !== req.user.id) {
-      console.log("Unauthorized! Task belongs to:", task.user);
-      return res.status(401).json({ msg: 'Not authorized' });
-    }
-
-    await task.deleteOne();
-
-    res.json({ msg: 'Task removed' });
+    await Task.deleteOne({ _id: req.params.id }); // safer than .remove()
+    res.json({ msg: 'Task deleted' });
   } catch (err) {
-    console.error("DELETE Error:", err);
+    console.error('Delete error:', err);
     res.status(500).send('Server Error');
   }
 });

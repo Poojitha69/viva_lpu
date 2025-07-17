@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import api from '../api';
 import { useNavigate } from 'react-router-dom';
+import './Auth.css';
 
 function Register() {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const navigate = useNavigate();
 
-  const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const onChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -20,13 +22,40 @@ function Register() {
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <h2>Register</h2>
-      <input name="name" placeholder="Name" onChange={onChange} required />
-      <input name="email" placeholder="Email" onChange={onChange} required />
-      <input name="password" type="password" placeholder="Password" onChange={onChange} required />
-      <button type="submit">Register</button>
-    </form>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2>Register</h2>
+        <form onSubmit={onSubmit}>
+          <input
+            name="name"
+            placeholder="Name"
+            onChange={onChange}
+            required
+          />
+          <input
+            name="email"
+            placeholder="Email"
+            onChange={onChange}
+            required
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            onChange={onChange}
+            required
+          />
+          <button type="submit">Register</button>
+        </form>
+        <p className="switch-text">Already have an account?</p>
+        <button
+          className="switch-button"
+          onClick={() => navigate('/login')}
+        >
+          Click here to Login
+        </button>
+      </div>
+    </div>
   );
 }
 

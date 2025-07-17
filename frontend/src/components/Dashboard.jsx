@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../api';
 import TaskItem from './TaskItem';
 import { useNavigate } from 'react-router-dom';
+import './Dashboard.css'; // ✅ Import CSS for styling
 
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
@@ -19,7 +20,7 @@ function Dashboard() {
       }
     };
     fetchTasks();
-  }, [navigate]); // ✅ Added navigate as dependency
+  }, [navigate]);
 
   const addTask = async () => {
     if (!title.trim()) return;
@@ -39,20 +40,32 @@ function Dashboard() {
   };
 
   return (
-    <div>
-      <h2>My Todo List</h2>
-      <input
-        placeholder="New Task"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <button onClick={addTask}>Add</button>
-      <ul>
-        {tasks.map((task) => (
-          <TaskItem key={task._id} task={task} fetchTasks={() => setTasks(tasks)} />
-        ))}
-      </ul>
-      <button onClick={logout}>Logout</button>
+    <div className="dashboard-container">
+      <div className="dashboard-card">
+        <div className="dashboard-header">
+          <h2>📝 My Todo List</h2>
+          <button className="logout-btn" onClick={logout}>
+            Logout
+          </button>
+        </div>
+        <div className="add-task">
+          <input
+            placeholder="Add a new task..."
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <button onClick={addTask}>➕ Add</button>
+        </div>
+        <ul className="task-list">
+          {tasks.map((task) => (
+            <TaskItem
+              key={task._id}
+              task={task}
+              fetchTasks={() => setTasks(tasks)}
+            />
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
